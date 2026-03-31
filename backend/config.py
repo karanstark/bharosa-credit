@@ -5,7 +5,7 @@ load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_API_KEY_FALLBACK = "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"
+GROQ_API_KEY_FALLBACK = os.getenv("GROQ_API_KEY_FALLBACK", "")
 
 FEATURE_WEIGHTS = {
   "income_rhythm": 0.25,
