@@ -33,7 +33,7 @@ interface BharosaState {
   isLoading: boolean;
   error: string | null;
   analyzeFile: (file: File, amount: number) => Promise<void>;
-  analyzeSample: (type: string) => Promise<void>;
+  analyzeCustom: (data: any) => Promise<void>;
   setUser: (user: UserProfile | null) => void;
   resetStore: () => void;
 }
@@ -59,6 +59,16 @@ export const useBharosaStore = create<BharosaState>((set) => ({
     try {
       const data = await api.analyzeSample(type);
       set({ report: data, isLoading: false });
+    } catch (err) {
+      set({ error: api.handleApiError(err), isLoading: false });
+    }
+  },
+
+  analyzeCustom: async (data) => {
+    set({ isLoading: true, error: null });
+    try {
+      const result = await api.analyzeCustom(data);
+      set({ report: result, isLoading: false });
     } catch (err) {
       set({ error: api.handleApiError(err), isLoading: false });
     }

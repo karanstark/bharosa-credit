@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'https://bharosa-credit.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -57,6 +57,18 @@ export const sendOtp = async (phone: string) => {
 
 export const verifyOtp = async (phone: string, otp: string, sessionId: string) => {
   const response = await api.post('/api/sms/verify-otp', { phone, otp, session_id: sessionId });
+  return response.data;
+};
+
+export const analyzeCustom = async (data: {
+  goal: string;
+  current_cibil: number;
+  loan_amount: number;
+  monthly_income: number;
+  profession: string;
+  full_name?: string;
+}) => {
+  const response = await api.post('/analyze/custom', data);
   return response.data;
 };
 

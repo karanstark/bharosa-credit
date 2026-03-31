@@ -7,8 +7,16 @@ EC4 = "EC4_DATA_QUALITY_LOW"
 EC5 = "EC5_OUT_OF_DOMAIN"
 EC6 = "EC6_LLM_FAILURE"
 
-def calculate_score(features: dict, edge_cases: list) -> dict:
+def calculate_score(features: dict, edge_cases: list, metadata: dict = None) -> dict:
     profile = {}
+    metadata = metadata or {}
+    
+    # 1. Capture user-provided metrics from metadata if available
+    user_cibil = metadata.get('cibil')
+    user_goal = metadata.get('goal', 'General Prosperity')
+    
+    profile['user_cibil'] = user_cibil
+    profile['selected_goal'] = user_goal
     
     # Income Rhythm
     freq = features.get('income_frequency_days', 30)

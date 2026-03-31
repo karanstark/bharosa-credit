@@ -18,7 +18,11 @@ async def run(data_msg: AgentMessage) -> AgentMessage:
     return AgentMessage(
         agent_name="feature_agent",
         status=status,
-        data={"features": features, "edge_case_flags": edge_cases},
+        data={
+            "features": features, 
+            "edge_case_flags": edge_cases,
+            "metadata": data_msg.data.get("metadata", {})
+        },
         processing_time_ms=proc_time,
         next_agent="scoring_agent"
     )

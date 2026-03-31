@@ -6,8 +6,9 @@ async def run(feat_msg: AgentMessage) -> AgentMessage:
     start = time.time()
     features = feat_msg.data.get('features', {})
     edge_cases = feat_msg.data.get('edge_case_flags', [])
+    metadata = feat_msg.data.get('metadata', {})
     
-    profile = calculate_score(features, edge_cases)
+    profile = calculate_score(features, edge_cases, metadata)
     proc_time = int((time.time() - start) * 1000)
     
     return AgentMessage(

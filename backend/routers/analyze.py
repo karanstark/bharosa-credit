@@ -1,5 +1,5 @@
 from fastapi import APIRouter, File, UploadFile, Form, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 import pandas as pd
 import io
@@ -16,6 +16,14 @@ class AnalyzeRequest(BaseModel):
     requested_amount: float = 20000.0
     reference_number: Optional[str] = None
 
+class CustomOrchestrationRequest(BaseModel):
+    goal: str
+    current_cibil: int
+    loan_amount: float
+    monthly_income: float
+    profession: str
+    full_name: Optional[str] = "User"
+
 @router.post("")
 async def analyze_data(request: AnalyzeRequest):
     data = {"transactions": request.transactions}
@@ -31,6 +39,40 @@ async def analyze_data(request: AnalyzeRequest):
             
     orchestrator = BharosaOrchestrator()
     report = await orchestrator.run(data, requested_amount=request.requested_amount)
+    
+    return JSONResponse(content=report)
+
+@router.post("/custom")
+async def analyze_custom(request: CustomOrchestrationRequest):
+    """
+    Handles direct form input for personalized roadmaps.
+    Synthesizes a mock transaction history based on income/profession
+    to drive the 7-agent pipeline without a CSV upload.
+    """
+    # Synthesize a baseline data-set to feed the agents
+    # This keeps the 'Data Agent' and 'Feature Agent' active
+    mock_transactions = [
+        {"Date": "2024-01-01", "Description": "Salary", "Amount": request.monthly_income, "Type": "Credit"},
+        {"Date": "2024-01-02", "Description": "Rent", "Amount": request.monthly_income * 0.3, "Type": "Debit"},
+        {"Date": "2024-01-05", "Description": "EMI", "Amount": request.monthly_income * 0.1, "Type": "Debit"}
+    ]
+    
+    data = {
+        "metadata": {
+            "full_name": request.full_name,
+            "goal": request.goal,
+            "cibil": request.current_cibil,
+            "income": request.monthly_income,
+            "profession": request.profession
+        },
+        "transactions": mock_transactions
+    }
+    
+    orchestrator = BharosaOrchestrator()
+    report = await orchestrator.run(data, requested_amount=request.loan_amount)
+    
+    # Inject the user's specific goal into the report for consistent framing
+    report["selected_goal"] = request.goal
     
     return JSONResponse(content=report)
 

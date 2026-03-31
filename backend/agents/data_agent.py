@@ -151,7 +151,11 @@ async def run(file_path_or_df) -> AgentMessage:
     return AgentMessage(
         agent_name="data_agent",
         status=status,
-        data={"clean_df": clean_df, "data_quality_report": data_quality_report},
+        data={
+            "clean_df": clean_df, 
+            "data_quality_report": data_quality_report,
+            "metadata": file_path_or_df.get("metadata", {}) if isinstance(file_path_or_df, dict) else {}
+        },
         errors=errors,
         warnings=warnings,
         processing_time_ms=proc_time,

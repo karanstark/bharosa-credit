@@ -34,5 +34,17 @@
         "state": "",
         "profession": "Verified Citizen",
         "email": "karavengers@gmail.com"
+    },
+    {
+        "firebase_uid": "2pTwmhoIJMg66ujAVUKNz40Hmt62",
+        "first_name": "Karan",
+        "last_name": "P",
+        "age": 0,
+        "phone": "0000000000",
+        "address": "Google Auth",
+        "country": "India",
+        "state": "",
+        "profession": "Verified Citizen",
+        "email": "karavengers@gmail.com"
     }
 ]
