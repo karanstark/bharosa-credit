@@ -245,11 +245,8 @@ function App() {
             <LoginPage 
               onBack={goHome} 
               onLoginSuccess={() => {
-                if (selectedProduct) {
-                  setView('requirement-form');
-                } else {
-                  setView('dashboard');
-                }
+                // Always go to the Orchestration Form first — Dashboard requires a pipeline report
+                setView('upload');
               }}
               onSignUpClick={() => setView('signup')}
             />
